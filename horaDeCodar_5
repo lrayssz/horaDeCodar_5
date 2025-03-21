@@ -2,39 +2,73 @@ programa
 {
 	
    	real saldo = 150.00// Float
+    cadeia nomeDoUsuario
 
 	funcao inicio() {
 
 		inteiro opcao 
-    cadeia nomeDoUsuario
 
     escreva("Qual seu nome? ")
     leia(nomeDoUsuario)
 
     escreva("Olá " , nomeDoUsuario , ", é um prazer ter você por aqui!\n")
-	
-		escreva("Escolha uma opção:\n")
+
+    escreva("Escolha uma opção:\n")
 		escreva("1. Ver saldo\n")
-		escreva("2. Fazer depósito\n")
+    escreva("2. Ver extrato\n")
 		escreva("3. Fazer saque\n")
-		escreva("4. Sair\n")
+		escreva("4. Fazer depósito\n")
+    escreva("5. Transferência\n")
+		escreva("6. Sair\n")
 		leia(opcao)
 
-		escreva("A opção selecionada foi: " +opcao + "\n")
+		escreva("A opção selecionada foi: " + opcao + "\n")
 
-    		se (opcao == 1) {
-    			verSaldo()
-    		} senao se (opcao == 2) {
-			fazerDeposito()
-    		} senao se (opcao == 3) {
-			fazerSaque()
-    		} senao se (opcao == 4) {
-			sair()
-    		} senao {
-			erro()
-    		}
+    escolha(opcao) {
+      caso 1:
+    	verSaldo()
+      pare
+
+      caso 2: 
+      verExtrato()
+      pare
+
+      caso 3:
+      fazerSaque()
+      pare
+
+      caso 4:
+      fazerDeposito()
+      pare
+
+      caso 5:
+      fazerTransferencia()
+      pare
+
+      caso 6:
+      sair()
+      pare
+
+      caso contrario:
+      erro()
+    }
 
 	}
+
+  funcao validacao() {
+
+    inteiro senhaDeAcesso
+
+    escreva("Informe sua senha de acesso: ")
+    leia(senhaDeAcesso)
+
+    se(senhaDeAcesso == 3589){
+      escreva("Acesso concedido!\n")
+    } senao {
+      escreva("Acesso negado! Tente novamente.\n")
+      validacao()
+    }
+  }
 
 	funcao verSaldo(){
 	    escreva("Seu saldo atual é: ", saldo, "\n")
@@ -44,6 +78,8 @@ programa
 	funcao fazerDeposito() {
 
 		real deposito
+
+    validacao()
 		
 		escreva("Qual o valor para depósito? ")
 		leia(deposito)
@@ -60,6 +96,8 @@ programa
 	funcao fazerSaque(){
 	
 		real saque
+
+    validacao()
 	
 		escreva("Qual o valor para saque? ")
 		leia(saque)
@@ -67,19 +105,83 @@ programa
 		se (saque <= 0){
 	        escreva("Por favor, informe um número válido.\n")
 	        fazerSaque()
-		} senao {
+		} senao se(saque > saldo){
+      escreva("Operação não autorizada! O valor escolhido está acima do saldo, tente novamente.\n")
+      fazerSaque()
+    }senao se(saque <= 0) {
+      escreva("Operação não autorizada! Tente novamente.")
+      fazerSaque()
+    }senao {
 			saldo = saldo - saque
 			verSaldo()
 		}
 	}
 
+  funcao verExtrato() {
+
+    validacao()
+
+    escreva("- R$ 15,00 em Padaria dos sonhos\n")
+    escreva("- R$ 100,00 em Aparelhos eletrônicos\n")
+    escreva("+ R$ 30,00 recebido de Tatiane dos Santos\n")
+    escreva("- R$ 7,00 em Máquina do senac\n")
+
+    inicio()
+
+  }
+
+  funcao fazerTransferencia() {
+
+    inteiro transferencia
+    inteiro conta
+    cadeia portador
+    caracter confirmacao
+
+    validacao()
+
+    escreva("Informe o número da conta que ira receber a transferência: ")
+    leia(conta)
+
+    escreva("Informe o nome portador da conta: ")
+    leia(portador)
+
+    escreva("Seu saldo é: " , saldo , ". Informe o valor da transferência desejada: ")
+    leia(transferencia)
+
+    se(transferencia > saldo) {
+      escreva("Operação não autorizada! O valor escolhido está acima do saldo, tente novamente.\n")
+      fazerTransferencia()
+    } senao se(transferencia <= 0) {
+      escreva("Operação não autorizada! O valor escolhido está acima do saldo, tente novamente\n")
+      fazerTransferencia()
+    }senao {
+      escreva("\nConfirme os dados com S/N:\nPortador da conta: " , portador , "\nNúmero da conta: " , conta , "\nValor da transferência: " , transferencia , "\n")
+    leia(confirmacao)
+    }
+
+    escolha(confirmacao) {
+
+      caso "S":
+      saldo = saldo - transferencia
+      escreva("Transferência realizada!\n\n")
+      inicio()
+      pare
+
+      caso contrario:
+      escreva("Transferência não realizada.\n\n")
+      inicio()
+    }
+
+    verSaldo()
+  }
+
 	funcao erro() {
-		escreva("Opção Inválida")
+		escreva("Opção Inválida! Tente novamente.\n")
 		inicio()
 	}
 
-	funcao sair(){
-		escreva("Programa encerrado")
+	funcao sair() {
+		escreva(nomeDoUsuario , ", foi um prazer ter você por aqui!")
 	}
 }
 
